@@ -1,6 +1,6 @@
 import logger from "@calcom/lib/logger";
 
-import { LARK_HOST } from "../common";
+import { getHost } from "../common";
 import { getAppAccessToken } from "./AppAccessToken";
 
 const log = logger.getSubLogger({ prefix: [`[[LarkTenantCredential]`] });
@@ -86,7 +86,7 @@ const msg = {
 async function getTenantAccessTokenByTenantKey(tenantKey: string): Promise<string> {
   try {
     const appAccessToken = await getAppAccessToken();
-    const resp = await fetch(`https://${LARK_HOST}/open-apis/auth/v3/tenant_access_token`, {
+    const resp = await fetch(`https://${getHost()}/open-apis/auth/v3/tenant_access_token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -111,7 +111,7 @@ export async function sendPostMsg(
 ): Promise<{ code: number; msg: string }> {
   const tenantAccessToken = await getTenantAccessTokenByTenantKey(tenantKey);
 
-  const response = await fetch(`https://${LARK_HOST}/open-apis/im/v1/messages?receive_id_type=open_id`, {
+  const response = await fetch(`https://${getHost()}/open-apis/im/v1/messages?receive_id_type=open_id`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${tenantAccessToken}`,

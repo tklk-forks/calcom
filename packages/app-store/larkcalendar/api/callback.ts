@@ -8,7 +8,7 @@ import prisma from "@calcom/prisma";
 
 import getInstalledAppPath from "../../_utils/getInstalledAppPath";
 import { decodeOAuthState } from "../../_utils/oauth/decodeOAuthState";
-import { LARK_HOST } from "../common";
+import { getHost } from "../common";
 import { getAppAccessToken } from "../lib/AppAccessToken";
 import type { LarkAuthCredentials } from "../types/LarkCalendar";
 
@@ -25,7 +25,7 @@ async function getHandler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const appAccessToken = await getAppAccessToken();
 
-    const response = await fetch(`https://${LARK_HOST}/open-apis/authen/v1/access_token`, {
+    const response = await fetch(`https://${getHost()}/open-apis/authen/v1/access_token`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${appAccessToken}`,
@@ -90,7 +90,7 @@ async function getHandler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const primaryCalendarResponse = await fetch(
-      `https://${LARK_HOST}/open-apis/calendar/v4/calendars/primary`,
+      `https://${getHost()}/open-apis/calendar/v4/calendars/primary`,
       {
         method: "GET",
         headers: {

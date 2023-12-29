@@ -7,7 +7,7 @@ import { defaultHandler, defaultResponder } from "@calcom/lib/server";
 
 import getAppKeysFromSlug from "../../_utils/getAppKeysFromSlug";
 import { encodeOAuthState } from "../../_utils/oauth/encodeOAuthState";
-import { LARK_HOST } from "../common";
+import { getHost, getSlug } from "../common";
 
 const larkKeysSchema = z.object({
   app_id: z.string(),
@@ -22,16 +22,16 @@ async function getHandler(req: NextApiRequest) {
 
   const params = {
     app_id,
-    redirect_uri: `${WEBAPP_URL}/api/integrations/larkcalendar/callback`,
+    redirect_uri: `${WEBAPP_URL}/api/integrations/${getSlug()}/callback`,
     state,
   };
 
   const query = stringify(params);
 
-  const url = `https://${LARK_HOST}/open-apis/authen/v1/index?${query}`;
+  const url = `https://${getHost()}/open-apis/authen/v1/index?${query}`;
 
   // trigger app_ticket_immediately
-  fetch(`https://${LARK_HOST}/open-apis/auth/v3/app_ticket/resend`, {
+  fetch(`https://${getHost()}/open-apis/auth/v3/app_ticket/resend`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json; charset=utf-8",

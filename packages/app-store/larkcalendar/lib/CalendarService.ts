@@ -12,7 +12,7 @@ import type {
 import type { CredentialPayload } from "@calcom/types/Credential";
 
 import refreshOAuthTokens from "../../_utils/oauth/refreshOAuthTokens";
-import { handleLarkError, isExpired, LARK_HOST } from "../common";
+import { handleLarkError, isExpired, getHost } from "../common";
 import type {
   CreateAttendeesResp,
   CreateEventResp,
@@ -31,7 +31,7 @@ function parseEventTime2Timestamp(eventTime: string): string {
 }
 
 export default class LarkCalendarService implements Calendar {
-  private url = `https://${LARK_HOST}/open-apis`;
+  private url = `https://${getHost()}/open-apis`;
   private integrationName = "";
   private log: typeof logger;
   auth: { getToken: () => Promise<string> };

@@ -3,7 +3,7 @@ import { z } from "zod";
 import logger from "@calcom/lib/logger";
 import prisma from "@calcom/prisma";
 
-import { LARK_HOST, getAppKeys, isExpired } from "../common";
+import { getHost, getAppKeys, isExpired } from "../common";
 
 const log = logger.getSubLogger({ prefix: [`[[LarkAppCredential]`] });
 
@@ -69,7 +69,7 @@ const getAppTicket = async (): Promise<string> => {
    */
   log.info("Invoke app-ticket resend", appKeys.app_ticket);
 
-  fetch(`https://${LARK_HOST}/open-apis/auth/v3/app_ticket/resend`, {
+  fetch(`https://${getHost()}/open-apis/auth/v3/app_ticket/resend`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -114,7 +114,7 @@ export const getAppAccessToken: () => Promise<string> = async () => {
   const appTicket = await getAppTicket();
 
   const fetchAppAccessToken = (app_ticket: string) =>
-    fetch(`https://${LARK_HOST}/open-apis/auth/v3/app_access_token`, {
+    fetch(`https://${getHost()}/open-apis/auth/v3/app_access_token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
